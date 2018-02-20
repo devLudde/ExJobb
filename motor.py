@@ -24,12 +24,11 @@ def rotate(steps, diraction):
    GPIO.output(DIR, diraction) # clockwise CW or counterclockwise CCW
    for i in range(steps):
       sleep(2)
-      camera.capture('/Picture/image%s.jpg' % i)
+      camera.capture('image%s.jpg' % i)
       GPIO.output(STEP, GPIO.HIGH)
       sleep(delay)
       GPIO.output(STEP, GPIO.LOW)
       sleep(delay)
-   GPIO.cleanup()
    return
 
 #rotate(SPR, CW)
