@@ -4,7 +4,10 @@ from time import sleep
 
 camera = PiCamera()
 
-camera.rotation =180
+camera.hflip=True
+camera.vflip=True
+
+#camera.rotation =180
 camera.start_preview()
-sleep(2)
+sleep(10)
 camera.stop_preview()
