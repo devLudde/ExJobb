@@ -4,6 +4,7 @@ import RPi.GPIO as GPIO
 
 camera = PiCamera()
 camera.vflip = True
+camera.hflip = True
 
 DIR = 20 #Direction Pin
 STEP = 21 #Step Pin
@@ -19,24 +20,26 @@ step_count = SPR
 delay = 0.005
 
 
-def rotate(steps, diraction):
+def RotateAndCapture(steps, diraction):
    #Rotate and diraction to rotate at
    GPIO.output(DIR, diraction) # clockwise CW or counterclockwise CCW
+   camera.start_preview()
+   sleep(2)
+   camera.stop_preview()
    for i in range(steps):
-      sleep(2)
-      camera.capture('image%s.jpg' % i)
+      sleep(0.2)
+      TakePictures((i+1))
       GPIO.output(STEP, GPIO.HIGH)
       sleep(delay)
       GPIO.output(STEP, GPIO.LOW)
       sleep(delay)
    return
 
-#rotate(SPR, CW)
-#sleep(0.5)
-#rotate(SPR, CCW)
-camera.start_preview()
-sleep(5)
-rotate(3,CW)
-camera.stop_preview()
+def TakePictures(prefix):
+   camera.capture('/home/pi/ExJobb/LaserCamera/ExJobb/Picture/image%s.jpg' % prefix)
 
+
+
+
+RotateAndCapture(50,CW)
 GPIO.cleanup()
