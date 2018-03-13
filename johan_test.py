@@ -8,15 +8,15 @@ camera = PiCamera()
 camera.vflip = True
 camera.hflip = True
 
-DIR = 20 #Direction Pin
-STEP = 21 #Step Pin
+DIR = 26 #Direction Pin
+STEP = 19 #Step Pin
 CW = 1 #Clockwise Rotation
 CCW = 0 #CounterClockWise Rotation
 SPR = 200 #Steps/varv 360/200 = 1,8
 
 GPIO.setmode(GPIO.BCM) #bradcome memory
-GPIO.setup(DIR, GPIO.OUT)#Puts DIR (20) Pin to OUT
-GPIO.setup(STEP, GPIO.OUT)#Puts STEP (21) Pin to OUT
+GPIO.setup(DIR, GPIO.OUT)#Puts DIR (26) Pin to OUT
+GPIO.setup(STEP, GPIO.OUT)#Puts STEP (19) Pin to OUT
 
 step_count = SPR
 delay = 0.005
@@ -43,5 +43,6 @@ def TakePictures(prefix):
 
 
 
-RotateAndCapture(50,CW)
+RotateAndCapture(200,CW)
 GPIO.cleanup()
+
