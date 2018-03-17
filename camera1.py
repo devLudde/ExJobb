@@ -7,6 +7,6 @@ camera.hflip = True
 
 camera.start_preview()
 time.sleep(5)
-camera.capture('/home/pi/ExJobb/LaserCamera/ExJobb/Picture/LaserPic.jpg')
+camera.capture('LaserPic1.jpg')
 camera.stop_preview()
 

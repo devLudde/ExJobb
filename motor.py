@@ -19,7 +19,7 @@ GPIO.setup(DIR, GPIO.OUT)#Puts DIR (20) Pin to OUT
 GPIO.setup(STEP, GPIO.OUT)#Puts STEP (21) Pin to OUT
 
 step_count = SPR
-delay = 0.005
+delay = 0.0003
 
 
 def RotateAndCapture(steps, diraction):
@@ -28,9 +28,16 @@ def RotateAndCapture(steps, diraction):
    camera.start_preview()
    sleep(2)
    camera.stop_preview()
+   micro_step_16=0
+   pic_prefix = 0
    for i in range(steps):
-      sleep(0.2)
-      TakePictures((i+1))
+#      sleep(0.2)
+#      TakePictures((i+1))
+      if(micro_step_16>=16):
+         pic_prefix +=1
+         TakePictures((pic_prefix))
+         micro_step_16 = 0
+      micro_step_16+=1
       GPIO.output(STEP, GPIO.HIGH)
       sleep(delay)
       GPIO.output(STEP, GPIO.LOW)
@@ -38,10 +45,29 @@ def RotateAndCapture(steps, diraction):
    return
 
 def TakePictures(prefix):
-   camera.capture('/home/pi/ExJobb/LaserCamera/ExJobb/Picture/image%s.jpg' % prefix)
+   camera.capture('/home/pi/ExJobb/LaserCamera/ExJobb/Pictures/image%s.jpg' % prefix)
+
+def set_up(steps):
+   GPIO.output(DIR,CCW)
+   for i in range(int(steps)):
+      GPIO.output(STEP, GPIO.HIGH)
+      sleep(0.01)
+      GPIO.output(STEP, GPIO.LOW)
+      sleep(0.01)
+   return
+
+def rotate_deg(deg):
+   one_lap = 3200
+   microstep = (one_lap)/(360/deg)
+   set_up(microstep)
+
+def main():
+#   rotate_deg(45)
+   RotateAndCapture(3200,CW)
+   GPIO.cleanup()
+   
 
 
+if __name__ == '__main__':
+   main()
 
-
-RotateAndCapture(50,CW)
-GPIO.cleanup()
