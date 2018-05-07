@@ -6,27 +6,6 @@ import time
 import unittest
 
 
-"""def build_array(data, index):
-
-    multy_arr = [[0 for x in range(720)] for y in range(480)]
-    filename = ("multyarr%d.txt" % index)
-    file_for_array = open("multy_arr.txt", "w")
-    file_for_array.write("Y  ,  X  ,  Value\n")
-    ticks = time.time()
-    for y in range(0, 480):
-        for x in range(0, 720):
-            if data[y][x] > 40:
-                multy_arr[y][x] = data[y][x]
-                file_for_array.write("%d, %d, %d\n" % (y, x, multy_arr[y][x]))
-            
-    ticks = time.time() - ticks
-    print(ticks)
-    file_for_array.write("Y  ,  X  ,  Value\n")
-    file_for_array.close()
-    return multy_arr
-"""
-
-
 # Takes an image and make it to an np array
 def getdata_as_np_array(image_file_name):
     with Image.open(image_file_name) as img:
@@ -88,7 +67,7 @@ def find_laser(np_array_data, height, width):
     y ner
     x åt höger
     """
-    LASERVALUE = 40
+    LASERVALUE = 200
     laser_width = 0
     x_on_row_abow = 0
     x = 0
@@ -140,10 +119,7 @@ def get_file_number_as_index(filename):
     return number_list[0]
 
 
-
 def main():
-    width = 480
-    height = 720
     image_list = get_all_image_as_list()
     for i in image_list:
         # i = complete file path for 1 picture
@@ -155,24 +131,8 @@ def main():
         three_d_arr = calc_z(found_laser_at_position, index, width)
         name = ("threeDArrPicture%s.asp" % index)
         savefile(name, three_d_arr)
-    #print(image_list[1])
-    #data = getdata_as_np_array(image_list[1])
-    # print(data[1])
-    #laser = find_laser(data, WIDTH, HEIGHT)
-    # print(laser[1])
-    # calcZ(laser, WIDTH, HEIGHT, picture_index)
-
-
-class FindLaserTest(unittest.TestCase):
-    """Test find_laser function"""
-
-    def test_function_run(self):
-        data = [[50, 50, 50], [51, 51, 30]]
-        print(data)
-        find_laser(data, 2, 2)
 
 
 if __name__ == '__main__':
     main()
-    # unittest.main()
 
