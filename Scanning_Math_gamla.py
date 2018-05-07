@@ -6,7 +6,7 @@ import time
 import unittest
 
 
-"""def build_array(data, index):
+def build_array(data , index):
 
     multy_arr = [[0 for x in range(720)] for y in range(480)]
     filename = ("multyarr%d.txt" % index)
@@ -24,19 +24,18 @@ import unittest
     file_for_array.write("Y  ,  X  ,  Value\n")
     file_for_array.close()
     return multy_arr
-"""
 
-
+    
 # Takes an image and make it to an np array
 def getdata_as_np_array(image_file_name):
-    with Image.open(image_file_name) as img:
-        im_rgb = img.convert('RGB')
-        width, height = img.size
-        shape = (height, width)
+    im = Image.open(image_file_name)
+    im_rgb = im.convert('RGB')
+    width, height = im.size
+    shape = (height, width)
     
-        picture_list_only_r_band = list(im_rgb.getdata(0))
-        data = np.array(picture_list_only_r_band)
-        data.shape = shape
+    picture_list_only_r_band = list(im_rgb.getdata(0))
+    data = np.array( picture_list_only_r_band )
+    data.shape = shape
     return data
     
     
@@ -46,35 +45,15 @@ def get_all_image_as_list():
     for filename in glob.glob('C:\Programmering\ExJobb\Pictures/*.jpg'):
         image_list.append(filename)
     return image_list
+    
+
+def calcZ(arr , itr):
+    print(arr)
 
 
-def calc_z(arr, itr, width):
-    # Arr lista av lista, arr[0] = (y, x)
-    # itr = iteration, 0-199
-    # print(arr)
-    laserAngle = 45
-    pxpmmhor = 8  # 15 cm avstånd
-    pxpmmver = 8  # 15 cm avstånd
-    fi = float(itr) * 1.8
-    return_arr = []
-    # width avstånd från kant till mitten av bilden
-    for i in range(0, len(arr)):
-        b = (arr[i][1] - (width / 2)) / pxpmmhor
-        ro = b / math.sin(laserAngle)
-
-        x = ro * math.cos(fi)
-        y = ro * math.sin(fi)
-        z = arr[i][0] / pxpmmver
-        t = [x, y, z]
-        return_arr.append(t)
-    return return_arr
-    # spara (x, y, z) till fil/array
-
-
-def savefile(filename, value):
+def saveArrToFile(filename, value, y, x):
     with open(filename, mode='wt', encoding='utf-8') as file:
-        for i in value:
-            file.write("%d, %d, %d\n" % (i[0], i[1], i[2]))
+        file.write("%d, %d, %d\n" % (y, x, value))
 
 
 def find_laser(np_array_data, height, width):
@@ -94,6 +73,7 @@ def find_laser(np_array_data, height, width):
     x = 0
     nuber_of_objekt = 0
     picture_list = []
+    t=0
     ticks = time.time()
     for y in range(0, height):
         while x != width:
@@ -122,45 +102,17 @@ def find_laser(np_array_data, height, width):
     ticks = time.time() - ticks
     print("new :", ticks)
     return picture_list
-
-
-def get_file_number_as_index(filename):
-    """
-    IN:
-    c:\Programmering\ExJobb\Pictures\123.jpg
-    Takes an filepath
-
-    OUT:
-    returns number
-    123
-    """
-
-    filename_list = filename.split("\\")
-    number_list = filename_list[4].split(".")
-    return number_list[0]
-
-
+    
 
 def main():
-    width = 480
-    height = 720
     image_list = get_all_image_as_list()
     for i in image_list:
-        # i = complete file path for 1 picture
-        with Image.open(i) as img:
-            width, height = img.size
-        index = get_file_number_as_index(i)
-        data = getdata_as_np_array(i)
-        found_laser_at_position = find_laser(data, height, width)  # kontrollera att width och height stämmer
-        three_d_arr = calc_z(found_laser_at_position, index, width)
-        name = ("threeDArrPicture%s.asp" % index)
-        savefile(name, three_d_arr)
-    #print(image_list[1])
-    #data = getdata_as_np_array(image_list[1])
-    # print(data[1])
-    #laser = find_laser(data, WIDTH, HEIGHT)
-    # print(laser[1])
-    # calcZ(laser, WIDTH, HEIGHT, picture_index)
+        print(i)
+        #print(str(image_list[0]))
+    data = getdata_as_np_array(image_list[1])
+    print(data)
+    laser = find_laser(data, 480, 720)
+    # calcZ(laser)
 
 
 class FindLaserTest(unittest.TestCase):
@@ -174,5 +126,5 @@ class FindLaserTest(unittest.TestCase):
 
 if __name__ == '__main__':
     main()
-    # unittest.main()
+    unittest.main()
 
