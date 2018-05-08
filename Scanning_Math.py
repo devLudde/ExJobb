@@ -26,14 +26,36 @@ def get_all_image_as_list():
     return image_list
 
 
-def calc_z(arr, itr, width):
+def calc_z_string(arr, index, width):
     # Arr lista av lista, arr[0] = (y, x)
     # itr = iteration, 0-199
     # print(arr)
     laserAngle = 45
     pxpmmhor = 8  # 15 cm avstånd
     pxpmmver = 8  # 15 cm avstånd
-    fi = float(itr) * 1.8
+    fi = float(index) * 1.8
+    # width avstånd från kant till mitten av bilden
+    for i in range(0, len(arr)):
+        b = float((arr[i][1] - (width / 2)) / pxpmmhor)
+        ro = float(b / math.sin(laserAngle))
+
+        x = float(ro * math.cos(fi))
+        y = float(ro * math.sin(fi))
+        z = float(arr[i][0] / pxpmmver)
+        s = ("%d, %d, %d\n" % (x, y, z))
+        #file.write("%d, %d, %d\n" % (i[0], i[1], i[2]))
+        return s
+    # spara (x, y, z) till fil/array
+
+
+def calc_z(arr, index, width):
+    # Arr lista av lista, arr[0] = (y, x)
+    # itr = iteration, 0-199
+    # print(arr)
+    laserAngle = 45
+    pxpmmhor = 8  # 15 cm avstånd
+    pxpmmver = 8  # 15 cm avstånd
+    fi = float(index) * 1.8
     return_arr = []
     # width avstånd från kant till mitten av bilden
     for i in range(0, len(arr)):
@@ -52,6 +74,7 @@ def calc_z(arr, itr, width):
 def savefile(filename, value):
     with open(filename, mode='at', encoding='utf-8') as file:  # mode='wt'
         for i in value:
+            #file.write(value)
             file.write("%d, %d, %d\n" % (i[0], i[1], i[2]))
 
 
@@ -69,14 +92,17 @@ def find_laser(np_array_data, height, width):
     LASERVALUE = 200
     laser_width = 0
     x_on_row_abow = 0
-    x = 0
+    start_x = math.floor(width * 0.35)  # x = 0
+    x = start_x
     nuber_of_objekt = 0
     picture_list = []
+    didnt_find_x_to_right = False
     ticks = time.time()
     for y in range(0, height):
         while x != width:
-            # om vi hittat lasern och har gått förbi den
-            # så lägger vi till det mittersta värdet på x som värdet där vi har lasern
+            # starta på ca 35% av width sedan gå åt höger
+            # hittar man inget gå från vänster till 35%
+            # hittar man inte laser där heller så sätter vi x = 35% igen
             if laser_width > 1 and np_array_data[y][x] < LASERVALUE:
                 x -= (laser_width/2)
                 x = math.floor(x)
@@ -89,12 +115,13 @@ def find_laser(np_array_data, height, width):
                 # om vi hittat lasern räkna hur bred den är
                 laser_width += 1
             x += 1
-            # file_for_array.write("%d, %d, %d\n" % (y, x, np_array_data[y][x]))
-        if x_on_row_abow > 30:
+        if x_on_row_abow > (start_x * 0.9):
             x = int(x_on_row_abow * 0.9)
             x_on_row_abow = 0
         else:
-            x = 0
+            x = start_x
+        # else:
+        #    x = 0
         laser_width = 0
     print(nuber_of_objekt)
     ticks = time.time() - ticks
@@ -127,6 +154,7 @@ def main():
         index = get_file_number_as_index(i)
         data = getdata_as_np_array(i)
         found_laser_at_position = find_laser(data, height, width)
+        print("Picture: %s" % index)
         three_d_arr = calc_z(found_laser_at_position, index, width)
         # name = ("threeDArrPicture%s.asc" % index)
         name = "scanned.asc"
