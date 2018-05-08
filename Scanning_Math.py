@@ -21,7 +21,7 @@ def getdata_as_np_array(image_file_name):
 # Retunerar en lista med alla kompletta namn på bilderna i mappen Pictures
 def get_all_image_as_list():
     image_list = []
-    for filename in glob.glob('C:\Programmering\ExJobb\Pictures/*.jpg'):
+    for filename in glob.glob('C:\Programmering\ExJobb\Pictures3/*.jpg'):
         image_list.append(filename)
     return image_list
 
@@ -37,12 +37,12 @@ def calc_z(arr, itr, width):
     return_arr = []
     # width avstånd från kant till mitten av bilden
     for i in range(0, len(arr)):
-        b = (arr[i][1] - (width / 2)) / pxpmmhor
-        ro = b / math.sin(laserAngle)
+        b = float((arr[i][1] - (width / 2)) / pxpmmhor)
+        ro = float(b / math.sin(laserAngle))
 
-        x = ro * math.cos(fi)
-        y = ro * math.sin(fi)
-        z = arr[i][0] / pxpmmver
+        x = float(ro * math.cos(fi))
+        y = float(ro * math.sin(fi))
+        z = float(arr[i][0] / pxpmmver)
         t = [x, y, z]
         return_arr.append(t)
     return return_arr
@@ -50,7 +50,7 @@ def calc_z(arr, itr, width):
 
 
 def savefile(filename, value):
-    with open(filename, mode='wt', encoding='utf-8') as file:
+    with open(filename, mode='at', encoding='utf-8') as file:  # mode='wt'
         for i in value:
             file.write("%d, %d, %d\n" % (i[0], i[1], i[2]))
 
@@ -128,7 +128,8 @@ def main():
         data = getdata_as_np_array(i)
         found_laser_at_position = find_laser(data, height, width)
         three_d_arr = calc_z(found_laser_at_position, index, width)
-        name = ("threeDArrPicture%s.asc" % index)
+        # name = ("threeDArrPicture%s.asc" % index)
+        name = "scanned.asc"
         savefile(name, three_d_arr)
 
 
