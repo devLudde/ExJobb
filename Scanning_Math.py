@@ -3,7 +3,6 @@ import numpy as np
 import math
 import glob
 import time
-import unittest
 
 
 # Takes an image and make it to an np array
@@ -127,9 +126,9 @@ def main():
             width, height = img.size
         index = get_file_number_as_index(i)
         data = getdata_as_np_array(i)
-        found_laser_at_position = find_laser(data, height, width)  # kontrollera att width och height stämmer
+        found_laser_at_position = find_laser(data, height, width)
         three_d_arr = calc_z(found_laser_at_position, index, width)
-        name = ("threeDArrPicture%s.asp" % index)
+        name = ("threeDArrPicture%s.asc" % index)
         savefile(name, three_d_arr)
 
 

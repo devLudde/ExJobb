@@ -45,7 +45,7 @@ def RotateAndCapture(steps, diraction):
    return
 
 def TakePictures(prefix):
-   camera.capture('/home/pi/ExJobb/LaserCamera/ExJobb/Pictures/image%s.jpg' % prefix)
+   camera.capture('/home/pi/ExJobb/LaserCamera/ExJobb/Pictures/%s.jpg' % prefix)
 
 def set_up(steps):
    GPIO.output(DIR,CCW)
