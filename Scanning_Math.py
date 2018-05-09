@@ -21,9 +21,21 @@ def getdata_as_np_array(image_file_name):
 # Retunerar en lista med alla kompletta namn på bilderna i mappen Pictures
 def get_all_image_as_list():
     image_list = []
-    for filename in glob.glob('C:\Programmering\ExJobb\Pictures3/*.jpg'):
+    dic_list = {}
+    # C:\Programmering\ExJobb\Squarepyramid15x45
+    # C:\Programmering\ExJobb\Pictures3
+    # Hourglass15x45
+    for filename in glob.glob('C:\Programmering\ExJobb\Hourglass15x45/*.jpg'):
+        index = get_file_number_as_index(filename)
+        print("Index: %s\t%s" % (index, filename))
+        dic_list[index] = filename
         image_list.append(filename)
+    d = sorted(dic_list, key=int)
+    # for key in sorted(dic_list, key=int):
+    #    print("%s : %s" % (key, dic_list[key]))
+    print(d)
     return image_list
+    # return d
 
 
 def calc_z_string(arr, index, width):
@@ -75,7 +87,7 @@ def savefile(filename, value):
     with open(filename, mode='at', encoding='utf-8') as file:  # mode='wt'
         for i in value:
             #file.write(value)
-            file.write("%d, %d, %d\n" % (i[0], i[1], i[2]))
+            file.write("%f, %f, %f\n" % (i[0], i[1], i[2]))
 
 
 def find_laser(np_array_data, height, width):
@@ -149,11 +161,13 @@ def main():
     image_list = get_all_image_as_list()
     for i in image_list:
         # i = complete file path for 1 picture
+        print(i)
         with Image.open(i) as img:
             width, height = img.size
         index = get_file_number_as_index(i)
         data = getdata_as_np_array(i)
         found_laser_at_position = find_laser(data, height, width)
+
         print("Picture: %s" % index)
         three_d_arr = calc_z(found_laser_at_position, index, width)
         # name = ("threeDArrPicture%s.asc" % index)
