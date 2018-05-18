@@ -234,7 +234,7 @@ def sys_argv():
             print("Scanning %s pictures" % sysArg[2])
             returnArr.append(sysArg[2])
         else: 
-            print("\nError: Nu number or to high number!")
+            print("\nError: No number or too high number!")
         
     else:
         print("Error, arguments isn't correct")
