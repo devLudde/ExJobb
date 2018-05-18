@@ -1,6 +1,7 @@
 from picamera import PiCamera
 from time import sleep
 import RPi.GPIO as GPIO
+import os
 
 
 
@@ -45,7 +46,13 @@ def RotateAndCapture(steps, diraction):
    return
 
 def TakePictures(prefix):
-   camera.capture('Pictures3/%s.jpg' % prefix)
+    folder = "Object_Ball_15_70_/"
+    path = "/home/pi/Desktop/my_project/Exjobb/" + folder
+    
+    if not os.path.exists(path):
+        os.makedirs(path)
+    
+    camera.capture(folder + '%s.jpg' % prefix)
 
 def set_up(steps):
    GPIO.output(DIR,CCW)
@@ -62,9 +69,9 @@ def rotate_deg(deg):
    set_up(microstep)
 
 def main():
-#   rotate_deg(45)
-   RotateAndCapture(3200,CW)
-   GPIO.cleanup()
+    #rotate_deg(40)
+    RotateAndCapture(3200,CW)
+    GPIO.cleanup()
    
 
 
