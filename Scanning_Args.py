@@ -43,11 +43,11 @@ def calc_z_string(arr, index, width):
     # spara (x, y, z) till fil/array
 
 
-def calc_z(arr, index, width):
+def calc_z(arr, index, width, laserAngle):
     # Arr lista av lista, arr[0] = (y, x)
     # itr = iteration, 0-199
     # print(arr)
-    laserAngle = 45
+    #laserAngle = 45
     pxpmmhor = 8  # 15 cm avstånd
     pxpmmver = 8  # 15 cm avstånd
     fi = (float(index) * 1.8 * math.pi)/ 180 ###radianer???
@@ -175,10 +175,10 @@ def delete_old_scann_file(fileName):
     if os.path.isfile(fileName):
         os.remove(fileName)
         print("\nOld %s file removed!" % fileName)
-        time.sleep(2)
+        time.sleep(1)
     else:
         print ("\n%s already deleted!" % fileName)
-        time.sleep(2)
+        time.sleep(1)
 
 
 def printInfo(mapinfo, picture, totPicture, precentage, map_index, totMap):
@@ -279,13 +279,13 @@ def main():
                 width, height = img.size
             data = getdata_as_np_array(imagePath)
             found_laser_at_position = find_laser(data, height, width)
-            three_d_arr = calc_z(found_laser_at_position, i, width)
+            three_d_arr = calc_z(found_laser_at_position, i, width, mapInfo[2])
             savefile(savePath, three_d_arr)
             os.system('cls')
             procent = picture_number /(len(maps_to_scann)* int(system_arguments[1]))*100 #fixa denna så att den räknar ut totala %klar
             
             printInfo(mapInfo, i, int(system_arguments[1]), procent, maps_to_scann.index(y), len(maps_to_scann))
-            
+    print("\n------------------3D scan done--------------------\n")
             
 
 if __name__ == '__main__':
