@@ -20,29 +20,6 @@ def getdata_as_np_array(image_file_name):
     return data
 
 
-
-def calc_z_string(arr, index, width):
-    # Arr lista av lista, arr[0] = (y, x)
-    # itr = iteration, 0-199
-    # print(arr)
-    laserAngle = 45
-    pxpmmhor = 8  # 15 cm avstånd
-    pxpmmver = 8  # 15 cm avstånd
-    fi = float(index) * 1.8
-    # width avstånd från kant till mitten av bilden
-    for i in range(0, len(arr)):
-        b = float((arr[i][1] - (width / 2)) / pxpmmhor)
-        ro = float(b / math.sin(laserAngle))
-
-        x = float(ro * math.cos(fi))
-        y = float(ro * math.sin(fi))
-        z = float(arr[i][0] / pxpmmver)
-        s = ("%d, %d, %d\n" % (x, y, z))
-        #file.write("%d, %d, %d\n" % (i[0], i[1], i[2]))
-        return s
-    # spara (x, y, z) till fil/array
-
-
 def calc_z(arr, index, width, laserAngle):
     # Arr lista av lista, arr[0] = (y, x)
     # itr = iteration, 0-199
@@ -52,10 +29,12 @@ def calc_z(arr, index, width, laserAngle):
     pxpmmver = 8  # 15 cm avstånd
     fi = (float(index) * 1.8 * math.pi)/ 180 ###radianer???
     return_arr = []
+
+    laserAngle = (laserAngle * math.pi) / 180
     
     # width avstånd från kant till mitten av bilden
     for i in range(0, len(arr)):
-        b = float((arr[i][1] - (width / 2)) / pxpmmhor)
+        b = float((arr[i][1] - (595)) / pxpmmhor)
             
         ro = float(b / math.sin(laserAngle))
 
@@ -213,7 +192,7 @@ def sys_argv():
     A eller a skannar in samtliga 199 bilder i varje map
     """
     lasses_laptop_FilePath = "c:/Programmering/ExJobb/Object_*"
-    johans_dator_FilePath = "C:\\Users\\Tyysken\\Documents\\GitHub\\ExJobb\\Object_*"
+    johans_dator_FilePath = "C:\\Users\\Tyysken\\Documents\\GitHub\\ExJobb\\Object_Ball*"
     sysArg = sys.argv
     returnArr = []
     if len(sysArg) == 3:
@@ -242,7 +221,10 @@ def sys_argv():
     
 
 def main():
-    system_arguments = sys_argv()
+    #system_arguments = sys_argv()
+    system_arguments = []
+    system_arguments.append("C:\\Users\\Tyysken\\Documents\\GitHub\\ExJobb\\Object_Ball*")
+    system_arguments.append(199)
     if len(system_arguments) == 2:
         print("correct")
     else: 
@@ -281,10 +263,10 @@ def main():
             found_laser_at_position = find_laser(data, height, width)
             three_d_arr = calc_z(found_laser_at_position, i, width, mapInfo[2])
             savefile(savePath, three_d_arr)
-            os.system('cls')
-            procent = picture_number /(len(maps_to_scann)* int(system_arguments[1]))*100 #fixa denna så att den räknar ut totala %klar
+            #os.system('cls')
+            #procent = picture_number /(len(maps_to_scann)* int(system_arguments[1]))*100 #fixa denna så att den räknar ut totala %klar
             
-            printInfo(mapInfo, i, int(system_arguments[1]), procent, maps_to_scann.index(y), len(maps_to_scann))
+            #printInfo(mapInfo, i, int(system_arguments[1]), procent, maps_to_scann.index(y), len(maps_to_scann))
     print("\n------------------3D scan done--------------------\n")
             
 
