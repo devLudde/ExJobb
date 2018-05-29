@@ -52,6 +52,8 @@ def calc_z(arr, index, width, laserAngle):
     pxpmmver = 8  # 15 cm avstånd
     fi = (float(index) * 1.8 * math.pi)/ 180 ###radianer???
     return_arr = []
+
+    laserAngle = (laserAngle * math.pi) / 180
     
     # width avstånd från kant till mitten av bilden
     for i in range(0, len(arr)):
@@ -66,7 +68,34 @@ def calc_z(arr, index, width, laserAngle):
         return_arr.append(t)
     return return_arr
     # spara (x, y, z) till fil/array
+"""
 
+def calc_z(arr, index, width, laserAngle):
+    # Arr lista av lista, arr[0] = (y, x)
+    # itr = iteration, 0-199
+    # print(arr)
+    #laserAngle = 45
+    pxpmmhor = 8  # 15 cm avstånd
+    pxpmmver = 8  # 15 cm avstånd
+    fi = (float(index) * 1.8 * math.pi)/ 180 ###radianer???
+    return_arr = []
+
+    laserAngle = (laserAngle * math.pi) / 180
+    
+    # width avstånd från kant till mitten av bilden
+    for i in range(0, len(arr)):
+        b = float((arr[i][1] - (595)) / pxpmmhor)
+            
+        ro = float(b / math.sin(laserAngle))
+
+        x = float(ro * math.cos(fi))
+        y = float(ro * math.sin(fi))
+        z = float(arr[i][0] / pxpmmver)
+        t = [x, y, z]
+        return_arr.append(t)
+    return return_arr
+    # spara (x, y, z) till fil/array
+"""
 
 def savefile(filename, value):
     with open(filename, mode='at', encoding='utf-8') as file:  # mode='wt'
@@ -175,10 +204,10 @@ def delete_old_scann_file(fileName):
     if os.path.isfile(fileName):
         os.remove(fileName)
         print("\nOld %s file removed!" % fileName)
-        time.sleep(1)
+        time.sleep(0.2)
     else:
         print ("\n%s already deleted!" % fileName)
-        time.sleep(1)
+        time.sleep(0.2)
 
 
 def printInfo(mapinfo, picture, totPicture, precentage, map_index, totMap):
@@ -291,8 +320,11 @@ def main():
 if __name__ == '__main__':
     print("\n\n-----Lasses och Johans Exjobb-----\n\n")
     time.sleep(1)
+    t= time.time()
     main()
-    
+
+    print("\nTime to complete\n")
+    print(time.time()-t)
     
     
     
