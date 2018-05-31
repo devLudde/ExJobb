@@ -43,13 +43,21 @@ def calc_z_string(arr, index, width):
     # spara (x, y, z) till fil/array
 
 
-def calc_z(arr, index, width, laserAngle):
+def calc_z(arr, index, width, laserAngle, laserDistance):
     # Arr lista av lista, arr[0] = (y, x)
     # itr = iteration, 0-199
     # print(arr)
     #laserAngle = 45
-    pxpmmhor = 8  # 15 cm avstånd
-    pxpmmver = 8  # 15 cm avstånd
+    if laserDistance == 15:
+        pxpmmhor = 8  # 15 cm avstånd
+        pxpmmver = 8  # 15 cm avstånd
+    elif laserDistance == 20:
+        pxpmmhor = 8  # 20 cm avstånd
+        pxpmmver = 8  # 20 cm avstånd
+    else:
+        print("pxpmmhor and pxpmmver isn't set in calc_z!")
+        sys.exit()
+
     fi = (float(index) * 1.8 * math.pi)/ 180 ###radianer???
     return_arr = []
 
@@ -154,7 +162,7 @@ def find_laser(np_array_data, height, width):
 def get_file_number_as_index(filename):
     """
     IN:
-    c:\Programmering\ExJobb\Pictures\123.jpg
+    c:/Programmering/ExJobb/Pictures/123.jpg
     Takes an filepath
 
     OUT:
@@ -289,7 +297,11 @@ def main():
         #path = maps_to_scann[y]
         path = y
         mapInfo = map_info(path)
-    
+        """
+        mapInfo[0] = Name on objekt to scan
+        mapInfo[1] = Distance
+        mapInfo[2] = Angle
+        """
         savePath = "Scanned\\" + mapInfo[0] + "_" + str(mapInfo[1]) + "x" + str(mapInfo[2]) +".asc"
         #print(savePath)
         
@@ -308,7 +320,7 @@ def main():
                 width, height = img.size
             data = getdata_as_np_array(imagePath)
             found_laser_at_position = find_laser(data, height, width)
-            three_d_arr = calc_z(found_laser_at_position, i, width, mapInfo[2])
+            three_d_arr = calc_z(found_laser_at_position, i, width, mapInfo[2], mapInfo[1])
             savefile(savePath, three_d_arr)
             os.system('cls')
             procent = picture_number /(len(maps_to_scann)* int(system_arguments[1]))*100 #fixa denna så att den räknar ut totala %klar
