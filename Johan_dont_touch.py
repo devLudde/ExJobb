@@ -48,7 +48,10 @@ def calc_z(arr, index, width, laserAngle, laserDistance):
     # itr = iteration, 0-199
     # print(arr)
     #laserAngle = 45
-    if laserDistance == 15:
+    if laserDistance == 10:
+        pxpmmhor = 8  # 15 cm avstånd
+        pxpmmver = 8  # 15 cm avstånd
+    elif laserDistance == 15:
         pxpmmhor = 8  # 15 cm avstånd
         pxpmmver = 8  # 15 cm avstånd
     elif laserDistance == 20:
@@ -320,7 +323,7 @@ def main():
                 width, height = img.size
             data = getdata_as_np_array(imagePath)
             found_laser_at_position = find_laser(data, height, width)
-            three_d_arr = calc_z(found_laser_at_position, i, width, mapInfo[2], mapInfo[1])
+            three_d_arr = calc_z(found_laser_at_position, i, width, laserAngle = mapInfo[2],laserDistance = mapInfo[1])
             savefile(savePath, three_d_arr)
             os.system('cls')
             procent = picture_number /(len(maps_to_scann)* int(system_arguments[1]))*100 #fixa denna så att den räknar ut totala %klar
